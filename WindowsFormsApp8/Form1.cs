@@ -376,11 +376,6 @@ namespace WindowsFormsApp8
             ToDeafult();
             ResetClicked();
             is_dfs = true;
-            /*if (clicked_id != -1)
-            {
-                Vertexes[clicked_id].BackColor = Color.DarkBlue;
-                clicked_id = -1;
-            }*/
         }
 
         private void Form1_Load(object sender, EventArgs e)
