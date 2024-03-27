@@ -59,7 +59,6 @@ namespace WindowsFormsApp8
         bool is_add_edge = false;
         bool is_dfs = false;
         bool clicked = false;
-        Point iOld = new Point();
         Point iClick = new Point();
         private Graphics graphics;
 
@@ -133,6 +132,7 @@ namespace WindowsFormsApp8
             is_add_edge = false;
             clicked = false;
             is_dfs = false;
+            AddEdgeBtn.BackColor = Color.Gainsboro;
         }
 
         private void ToDeafult()
@@ -202,23 +202,7 @@ namespace WindowsFormsApp8
         private void Form_MouseClick(object sender, MouseEventArgs e)
         {
             ToDeafult();
-            if (clicked_id != -1)
-            {
-                Vertexes[clicked_id].BackColor = Color.DarkBlue;
-                clicked_id = -1;
-            }
-            if (is_add_edge)
-            {
-                if (first_id != -1)
-                {
-                    Vertexes[GetIdByNum(first_id)].BackColor = Color.DarkBlue;
-                }
-                if (second_id != -1)
-                {
-                    Vertexes[GetIdByNum(second_id)].BackColor = Color.DarkBlue;
-                }
-                is_add_edge = false;
-            }
+            ResetClicked();
         }
 
         private void Vertex_MouseClick(object sender, EventArgs e)
@@ -271,17 +255,10 @@ namespace WindowsFormsApp8
                             Vertexes[i].BackColor = Color.HotPink;
                         }
                     }
-                    int first_vertex_id = GetIdByNum(first_id);
-                    int second_vertex_id = GetIdByNum(second_id);
-                    Point first = new Point(Vertexes[first_vertex_id].Left + 25, Vertexes[first_vertex_id].Top + 25);
-                    Point second = new Point(Vertexes[second_vertex_id].Left + 25, Vertexes[second_vertex_id].Top + 25);
-                    graphics.DrawLine(Pens.DarkBlue, first, second);
-                    Vertexes[first_vertex_id].BackColor = Color.DarkBlue;
-                    Vertexes[second_vertex_id].BackColor = Color.DarkBlue;
                     Edges.Add(new Edge(first_id, second_id));
-                    is_add_edge = false;
                     first_id = -1;
                     second_id = -1;
+                    ToDeafult();
                 }
             }
         }
@@ -303,14 +280,11 @@ namespace WindowsFormsApp8
                         }
                     }
                     Point p = ConvertFromChildToForm(e.X, e.Y, Vertexes[clicked_id]);
-                    iOld.X = p.X;
-                    iOld.Y = p.Y;
                     iClick.X = e.X;
                     iClick.Y = e.Y;
                     clicked = true;
                 }
             }
-
         }
 
         private void Vertex_MouseMove(object sender, MouseEventArgs e)
@@ -393,17 +367,28 @@ namespace WindowsFormsApp8
         {
             ResetClicked();
             ToDeafult();
+            AddEdgeBtn.BackColor = Color.CornflowerBlue;
             is_add_edge = true;
         }
 
         private void DfsBtn_Click(object sender, EventArgs e)
         {
+            ToDeafult();
+            ResetClicked();
             is_dfs = true;
-            if (clicked_id != -1)
+            /*if (clicked_id != -1)
             {
                 Vertexes[clicked_id].BackColor = Color.DarkBlue;
                 clicked_id = -1;
-            }
+            }*/
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            AddVertexBtn.BackColor = Color.Gainsboro;
+            RemoveVertexBtn.BackColor = Color.Gainsboro;
+            AddEdgeBtn.BackColor = Color.Gainsboro;
+            DfsBtn.BackColor = Color.Gainsboro;
         }
     }
 

@@ -47,12 +47,13 @@ namespace WindowsFormsApp8
             // 
             // RemoveVertexBtn
             // 
+            this.RemoveVertexBtn.BackColor = System.Drawing.Color.Gainsboro;
             this.RemoveVertexBtn.Location = new System.Drawing.Point(177, 12);
             this.RemoveVertexBtn.Name = "RemoveVertexBtn";
             this.RemoveVertexBtn.Size = new System.Drawing.Size(150, 40);
             this.RemoveVertexBtn.TabIndex = 2;
             this.RemoveVertexBtn.Text = "Удалить вершину";
-            this.RemoveVertexBtn.UseVisualStyleBackColor = true;
+            this.RemoveVertexBtn.UseVisualStyleBackColor = false;
             this.RemoveVertexBtn.Click += new System.EventHandler(this.RemoveVertexBtn_Click);
             // 
             // AddEdgeBtn
@@ -87,6 +88,7 @@ namespace WindowsFormsApp8
             this.Controls.Add(this.AddVertexBtn);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form_MouseClick);
             this.ResumeLayout(false);
 
