@@ -29,6 +29,7 @@ namespace WindowsFormsApp8
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.AddVertexBtn = new System.Windows.Forms.Button();
             this.RemoveVertexBtn = new System.Windows.Forms.Button();
             this.AddEdgeBtn = new System.Windows.Forms.Button();
@@ -86,6 +87,7 @@ namespace WindowsFormsApp8
             this.Controls.Add(this.AddEdgeBtn);
             this.Controls.Add(this.RemoveVertexBtn);
             this.Controls.Add(this.AddVertexBtn);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
