@@ -58,6 +58,7 @@ namespace WindowsFormsApp8
         int second_id = -1;
         bool is_add_edge = false;
         bool is_dfs = false;
+        bool is_bfs = false;
         bool clicked = false;
         Point iClick = new Point();
         private Graphics graphics;
@@ -132,6 +133,7 @@ namespace WindowsFormsApp8
             is_add_edge = false;
             clicked = false;
             is_dfs = false;
+            is_bfs = false;
             AddEdgeBtn.BackColor = Color.Gainsboro;
         }
 
@@ -147,6 +149,88 @@ namespace WindowsFormsApp8
             }
             this.Refresh();
             DrawEdges();
+        }
+
+        private void AddEdge(object sender, EventArgs e)
+        {
+            if (first_id == -1)
+            {
+                for (int i = 0; i < Vertexes.Count(); ++i)
+                {
+                    if (sender.Equals(Vertexes[i]))
+                    {
+                        first_id = Convert.ToInt32(Vertexes[i].Text);
+                        Vertexes[i].BackColor = Color.HotPink;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < Vertexes.Count(); ++i)
+                {
+                    if (sender.Equals(Vertexes[i]))
+                    {
+                        second_id = Convert.ToInt32(Vertexes[i].Text);
+                        Vertexes[i].BackColor = Color.HotPink;
+                    }
+                }
+                Edges.Add(new Edge(first_id, second_id));
+                first_id = -1;
+                second_id = -1;
+                ToDeafult();
+            }
+        }
+
+        private void StartDfs(object sender, EventArgs e)
+        {
+            ResetClicked();
+            ToDeafult();
+            int dfs_id = -1;
+            nums_pos.Clear();
+            for (int i = 0; i < Vertexes.Count(); ++i)
+            {
+                if (sender.Equals(Vertexes[i]))
+                {
+                    dfs_id = Convert.ToInt32(Vertexes[i].Text);
+                    Vertexes[i].BackColor = Color.HotPink;
+                }
+            }
+            this.Refresh();
+            int x = Vertexes[GetIdByNum(dfs_id)].Left + 18;
+            int y = Vertexes[GetIdByNum(dfs_id)].Top - 15;
+            nums_pos.Add(new Point(x, y));
+            DrawNums();
+            DrawEdges();
+            UpdateGraph();
+            Thread.Sleep(500);
+            dfs(GetIdByNum(dfs_id));
+            is_dfs = false;
+        }
+
+        private void StartBfs(object sender, EventArgs e)
+        {
+            ResetClicked();
+            ToDeafult();
+            int bfs_id = -1;
+            nums_pos.Clear();
+            for (int i = 0; i < Vertexes.Count(); ++i)
+            {
+                if (sender.Equals(Vertexes[i]))
+                {
+                    bfs_id = Convert.ToInt32(Vertexes[i].Text);
+                    Vertexes[i].BackColor = Color.HotPink;
+                }
+            }
+            this.Refresh();
+            int x = Vertexes[GetIdByNum(bfs_id)].Left + 18;
+            int y = Vertexes[GetIdByNum(bfs_id)].Top - 15;
+            nums_pos.Add(new Point(x, y));
+            DrawNums();
+            DrawEdges();
+            UpdateGraph();
+            Thread.Sleep(500);
+            bfs(GetIdByNum(bfs_id));
+            is_bfs = false;
         }
 
         private void UpdateGraph()
@@ -197,6 +281,41 @@ namespace WindowsFormsApp8
             }
         }
 
+        private void bfs(int s)
+        {
+            List<int> q = new List<int>();
+            used[s] = 1;
+            q.Add(s);
+            while (q.Count != 0)
+            {
+                int v = q[0];
+                q.Remove(q[0]);
+                for (int i = 0; i < Graph[v].Count; ++i)
+                {
+                    if (Graph[v][i] != 0)
+                    {
+                        int to = i;
+                        if (used[to] != 1)
+                        {
+                            used[to] = 1;
+                            q.Add(to);
+                            Edges[GetEdgeId(v, to)].SetColor(Color.HotPink);
+                            DrawEdges();
+                            Thread.Sleep(500);
+                            Vertexes[to].BackColor = Color.HotPink;
+                            this.Refresh();
+                            int x = Vertexes[to].Left + 18;
+                            int y = Vertexes[to].Top - 15;
+                            nums_pos.Add(new Point(x, y));
+                            DrawNums();
+                            DrawEdges();
+                            Thread.Sleep(500);
+                        }
+                    }
+                }
+            }
+        }
+
         // Обработка кликов мышью
 
         private void Form_MouseClick(object sender, MouseEventArgs e)
@@ -206,66 +325,24 @@ namespace WindowsFormsApp8
         }
 
         private void Vertex_MouseClick(object sender, EventArgs e)
-        {
+        {   
+            if (is_bfs)
+            {
+                StartBfs(sender, e);
+            }
             if (is_dfs)
             {
-                ResetClicked();
-                ToDeafult();
-                int dfs_id = -1;
-                nums_pos.Clear();
-                for (int i = 0; i < Vertexes.Count(); ++i)
-                {
-                    if (sender.Equals(Vertexes[i]))
-                    {
-                        dfs_id = Convert.ToInt32(Vertexes[i].Text);
-                        Vertexes[i].BackColor = Color.HotPink;
-                    }
-                }
-                this.Refresh();
-                int x = Vertexes[GetIdByNum(dfs_id)].Left + 18;
-                int y = Vertexes[GetIdByNum(dfs_id)].Top - 15;
-                nums_pos.Add(new Point(x, y));
-                DrawNums();
-                DrawEdges();
-                UpdateGraph();
-                Thread.Sleep(500);
-                dfs(GetIdByNum(dfs_id));
-                is_dfs = false;
+                StartDfs(sender, e);
             }
             if (is_add_edge)
             {
-                if (first_id == -1)
-                {
-                    for (int i = 0; i < Vertexes.Count(); ++i)
-                    {
-                        if (sender.Equals(Vertexes[i]))
-                        {
-                            first_id = Convert.ToInt32(Vertexes[i].Text);
-                            Vertexes[i].BackColor = Color.HotPink;
-                        }
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < Vertexes.Count(); ++i)
-                    {
-                        if (sender.Equals(Vertexes[i]))
-                        {
-                            second_id = Convert.ToInt32(Vertexes[i].Text);
-                            Vertexes[i].BackColor = Color.HotPink;
-                        }
-                    }
-                    Edges.Add(new Edge(first_id, second_id));
-                    first_id = -1;
-                    second_id = -1;
-                    ToDeafult();
-                }
+                AddEdge(sender, e);
             }
         }
 
         private void Vertex_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!is_add_edge && !is_dfs)
+            if (!is_add_edge && !is_dfs && !is_bfs)
             {
                 ResetClicked();
                 ToDeafult();
@@ -384,6 +461,13 @@ namespace WindowsFormsApp8
             RemoveVertexBtn.BackColor = Color.Gainsboro;
             AddEdgeBtn.BackColor = Color.Gainsboro;
             DfsBtn.BackColor = Color.Gainsboro;
+        }
+
+        private void BfsBtn_Click(object sender, EventArgs e)
+        {
+            ToDeafult();
+            ResetClicked();
+            is_bfs = true;
         }
     }
 

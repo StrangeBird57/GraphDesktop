@@ -34,6 +34,7 @@ namespace WindowsFormsApp8
             this.RemoveVertexBtn = new System.Windows.Forms.Button();
             this.AddEdgeBtn = new System.Windows.Forms.Button();
             this.DfsBtn = new System.Windows.Forms.Button();
+            this.BfsBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AddVertexBtn
@@ -49,7 +50,7 @@ namespace WindowsFormsApp8
             // RemoveVertexBtn
             // 
             this.RemoveVertexBtn.BackColor = System.Drawing.Color.Gainsboro;
-            this.RemoveVertexBtn.Location = new System.Drawing.Point(177, 12);
+            this.RemoveVertexBtn.Location = new System.Drawing.Point(168, 12);
             this.RemoveVertexBtn.Name = "RemoveVertexBtn";
             this.RemoveVertexBtn.Size = new System.Drawing.Size(150, 40);
             this.RemoveVertexBtn.TabIndex = 2;
@@ -59,7 +60,7 @@ namespace WindowsFormsApp8
             // 
             // AddEdgeBtn
             // 
-            this.AddEdgeBtn.Location = new System.Drawing.Point(345, 12);
+            this.AddEdgeBtn.Location = new System.Drawing.Point(324, 12);
             this.AddEdgeBtn.Name = "AddEdgeBtn";
             this.AddEdgeBtn.Size = new System.Drawing.Size(150, 40);
             this.AddEdgeBtn.TabIndex = 3;
@@ -69,7 +70,7 @@ namespace WindowsFormsApp8
             // 
             // DfsBtn
             // 
-            this.DfsBtn.Location = new System.Drawing.Point(513, 12);
+            this.DfsBtn.Location = new System.Drawing.Point(480, 12);
             this.DfsBtn.Name = "DfsBtn";
             this.DfsBtn.Size = new System.Drawing.Size(150, 40);
             this.DfsBtn.TabIndex = 4;
@@ -77,12 +78,23 @@ namespace WindowsFormsApp8
             this.DfsBtn.UseVisualStyleBackColor = true;
             this.DfsBtn.Click += new System.EventHandler(this.DfsBtn_Click);
             // 
+            // BfsBtn
+            // 
+            this.BfsBtn.Location = new System.Drawing.Point(636, 12);
+            this.BfsBtn.Name = "BfsBtn";
+            this.BfsBtn.Size = new System.Drawing.Size(150, 40);
+            this.BfsBtn.TabIndex = 5;
+            this.BfsBtn.Text = "BFS";
+            this.BfsBtn.UseVisualStyleBackColor = true;
+            this.BfsBtn.Click += new System.EventHandler(this.BfsBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(832, 453);
+            this.Controls.Add(this.BfsBtn);
             this.Controls.Add(this.DfsBtn);
             this.Controls.Add(this.AddEdgeBtn);
             this.Controls.Add(this.RemoveVertexBtn);
@@ -101,6 +113,7 @@ namespace WindowsFormsApp8
         private System.Windows.Forms.Button RemoveVertexBtn;
         private System.Windows.Forms.Button AddEdgeBtn;
         private System.Windows.Forms.Button DfsBtn;
+        private System.Windows.Forms.Button BfsBtn;
     }
 }
 
