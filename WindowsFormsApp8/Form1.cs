@@ -57,6 +57,7 @@ namespace WindowsFormsApp8
         int first_id = -1;
         int second_id = -1;
         bool is_add_vertex = false;
+        bool is_remove_vertex = false;
         bool is_add_edge = false;
         bool is_dfs = false;
         bool is_bfs = false;
@@ -133,11 +134,13 @@ namespace WindowsFormsApp8
             second_id = -1;
             is_add_edge = false;
             is_add_vertex = false;
+            is_remove_vertex = false;
             clicked = false;
             is_dfs = false;
             is_bfs = false;
             AddEdgeBtn.BackColor = Color.Gainsboro;
             AddVertexBtn.BackColor = Color.Gainsboro;
+            RemoveVertexBtn.BackColor = Color.Gainsboro;
         }
 
         private void ToDeafult()
@@ -152,6 +155,35 @@ namespace WindowsFormsApp8
             }
             this.Refresh();
             DrawEdges();
+        }
+
+        private void RemoveVertex(object sender, EventArgs e)
+        {
+            int id = -1;
+            for (int i = 0; i < Vertexes.Count; ++i)
+            {
+                if (sender.Equals(Vertexes[i])) {
+                    id = i;
+                    break;
+                }
+            }
+            List<Edge> remove_edges = new List<Edge>();
+            for (int i = 0; i < Edges.Count; ++i)
+            {
+                int first = GetIdByNum(Edges[i].GetFrom());
+                int second = GetIdByNum(Edges[i].GetTo());
+                if (first == id || second == id)
+                {
+                    remove_edges.Add(Edges[i]);
+                }
+            }
+            for (int i = 0; i < remove_edges.Count; ++i)
+            {
+                Edges.Remove(remove_edges[i]);
+            }
+
+            this.Controls.Remove(Vertexes[id]);
+            Vertexes.Remove(Vertexes[id]);
         }
 
         private void AddEdge(object sender, EventArgs e)
@@ -357,11 +389,15 @@ namespace WindowsFormsApp8
             {
                 AddEdge(sender, e);
             }
+            if (is_remove_vertex)
+            {
+                RemoveVertex(sender, e);
+            }
         }
 
         private void Vertex_MouseDown(object sender, MouseEventArgs e)
         {
-            if (!is_add_edge && !is_dfs && !is_bfs)
+            if (!is_add_edge && !is_dfs && !is_bfs && !is_remove_vertex)
             {
                 ResetClicked();
                 ToDeafult();
@@ -422,28 +458,8 @@ namespace WindowsFormsApp8
         {
             ResetClicked(clicked_id);
             ToDeafult();
-            if (clicked_id != -1)
-            {
-                List<Edge> remove_edges = new List<Edge>();
-                for (int i = 0; i < Edges.Count; ++i)
-                {
-                    int first = GetIdByNum(Edges[i].GetFrom());
-                    int second = GetIdByNum(Edges[i].GetTo());
-                    if (first == clicked_id || second == clicked_id)
-                    {
-                        remove_edges.Add(Edges[i]);
-                    }
-                }
-                for (int i = 0; i < remove_edges.Count; ++i)
-                {
-                    Edges.Remove(remove_edges[i]);
-                }
-
-                this.Controls.Remove(Vertexes[clicked_id]);
-                Vertexes.Remove(Vertexes[clicked_id]);
-                ResetClicked();
-                ToDeafult();
-            }
+            RemoveVertexBtn.BackColor = Color.CornflowerBlue;
+            is_remove_vertex = true;
         }
 
         private void AddEdgeBtn_Click(object sender, EventArgs e)
