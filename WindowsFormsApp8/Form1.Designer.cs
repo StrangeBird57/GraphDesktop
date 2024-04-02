@@ -35,6 +35,7 @@ namespace WindowsFormsApp8
             this.AddEdgeBtn = new System.Windows.Forms.Button();
             this.DfsBtn = new System.Windows.Forms.Button();
             this.BfsBtn = new System.Windows.Forms.Button();
+            this.ResetBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AddVertexBtn
@@ -88,12 +89,23 @@ namespace WindowsFormsApp8
             this.BfsBtn.UseVisualStyleBackColor = true;
             this.BfsBtn.Click += new System.EventHandler(this.BfsBtn_Click);
             // 
+            // ResetBtn
+            // 
+            this.ResetBtn.Location = new System.Drawing.Point(12, 412);
+            this.ResetBtn.Name = "ResetBtn";
+            this.ResetBtn.Size = new System.Drawing.Size(96, 29);
+            this.ResetBtn.TabIndex = 6;
+            this.ResetBtn.Text = "Сбросить";
+            this.ResetBtn.UseVisualStyleBackColor = true;
+            this.ResetBtn.Click += new System.EventHandler(this.ResetBtn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(832, 453);
+            this.Controls.Add(this.ResetBtn);
             this.Controls.Add(this.BfsBtn);
             this.Controls.Add(this.DfsBtn);
             this.Controls.Add(this.AddEdgeBtn);
@@ -114,6 +126,7 @@ namespace WindowsFormsApp8
         private System.Windows.Forms.Button AddEdgeBtn;
         private System.Windows.Forms.Button DfsBtn;
         private System.Windows.Forms.Button BfsBtn;
+        private System.Windows.Forms.Button ResetBtn;
     }
 }
 

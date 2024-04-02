@@ -56,6 +56,7 @@ namespace WindowsFormsApp8
         int clicked_id = -1;
         int first_id = -1;
         int second_id = -1;
+        bool is_add_vertex = false;
         bool is_add_edge = false;
         bool is_dfs = false;
         bool is_bfs = false;
@@ -131,10 +132,12 @@ namespace WindowsFormsApp8
             first_id = -1;
             second_id = -1;
             is_add_edge = false;
+            is_add_vertex = false;
             clicked = false;
             is_dfs = false;
             is_bfs = false;
             AddEdgeBtn.BackColor = Color.Gainsboro;
+            AddVertexBtn.BackColor = Color.Gainsboro;
         }
 
         private void ToDeafult()
@@ -320,12 +323,33 @@ namespace WindowsFormsApp8
 
         private void Form_MouseClick(object sender, MouseEventArgs e)
         {
-            ToDeafult();
-            ResetClicked();
+            if (is_add_vertex)
+            {
+                RoundButton tmp = new RoundButton();
+                tmp.Text = free_id.ToString();
+                tmp.Width = 50;
+                tmp.Height = 50;
+                tmp.BackColor = Color.DarkBlue;
+                tmp.ForeColor = Color.White;
+                tmp.MouseDown += Vertex_MouseDown;
+                tmp.MouseUp += Vertex_MouseUp;
+                tmp.MouseMove += Vertex_MouseMove;
+                tmp.MouseClick += Vertex_MouseClick;
+                tmp.Location = new Point(e.X - 25, e.Y - 25);
+                this.Controls.Add(tmp);
+                Vertexes.Add(tmp);
+                ++free_id;
+                DrawEdges();
+            }
+            else
+            {
+                ToDeafult();
+                ResetClicked();
+            }
         }
 
         private void Vertex_MouseClick(object sender, EventArgs e)
-        {   
+        {
             if (is_bfs)
             {
                 StartBfs(sender, e);
@@ -395,21 +419,8 @@ namespace WindowsFormsApp8
         {
             ResetClicked();
             ToDeafult();
-            RoundButton tmp = new RoundButton();
-            tmp.Text = free_id.ToString();
-            tmp.Width = 50;
-            tmp.Height = 50;
-            tmp.BackColor = Color.DarkBlue;
-            tmp.ForeColor = Color.White;
-            tmp.MouseDown += Vertex_MouseDown;
-            tmp.MouseUp += Vertex_MouseUp;
-            tmp.MouseMove += Vertex_MouseMove;
-            tmp.MouseClick += Vertex_MouseClick;
-            tmp.Location = new Point(100, 100);
-            this.Controls.Add(tmp);
-            Vertexes.Add(tmp);
-            ++free_id;
-            DrawEdges();
+            AddVertexBtn.BackColor = Color.CornflowerBlue;
+            is_add_vertex = true;
         }
 
         private void RemoveVertexBtn_Click(object sender, EventArgs e)
@@ -455,6 +466,13 @@ namespace WindowsFormsApp8
             is_dfs = true;
         }
 
+        private void BfsBtn_Click(object sender, EventArgs e)
+        {
+            ToDeafult();
+            ResetClicked();
+            is_bfs = true;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             AddVertexBtn.BackColor = Color.Gainsboro;
@@ -463,11 +481,10 @@ namespace WindowsFormsApp8
             DfsBtn.BackColor = Color.Gainsboro;
         }
 
-        private void BfsBtn_Click(object sender, EventArgs e)
+        private void ResetBtn_Click(object sender, EventArgs e)
         {
             ToDeafult();
             ResetClicked();
-            is_bfs = true;
         }
     }
 
