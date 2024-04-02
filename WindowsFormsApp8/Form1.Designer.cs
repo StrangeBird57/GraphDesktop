@@ -36,6 +36,7 @@ namespace WindowsFormsApp8
             this.DfsBtn = new System.Windows.Forms.Button();
             this.BfsBtn = new System.Windows.Forms.Button();
             this.ResetBtn = new System.Windows.Forms.Button();
+            this.ClearBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // AddVertexBtn
@@ -91,13 +92,23 @@ namespace WindowsFormsApp8
             // 
             // ResetBtn
             // 
-            this.ResetBtn.Location = new System.Drawing.Point(12, 412);
+            this.ResetBtn.Location = new System.Drawing.Point(12, 411);
             this.ResetBtn.Name = "ResetBtn";
-            this.ResetBtn.Size = new System.Drawing.Size(96, 29);
+            this.ResetBtn.Size = new System.Drawing.Size(100, 30);
             this.ResetBtn.TabIndex = 6;
             this.ResetBtn.Text = "Сбросить";
             this.ResetBtn.UseVisualStyleBackColor = true;
             this.ResetBtn.Click += new System.EventHandler(this.ResetBtn_Click);
+            // 
+            // ClearBtn
+            // 
+            this.ClearBtn.Location = new System.Drawing.Point(720, 411);
+            this.ClearBtn.Name = "ClearBtn";
+            this.ClearBtn.Size = new System.Drawing.Size(100, 30);
+            this.ClearBtn.TabIndex = 7;
+            this.ClearBtn.Text = "Отчистить";
+            this.ClearBtn.UseVisualStyleBackColor = true;
+            this.ClearBtn.Click += new System.EventHandler(this.ClearBtn_Click);
             // 
             // Form1
             // 
@@ -105,6 +116,7 @@ namespace WindowsFormsApp8
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(832, 453);
+            this.Controls.Add(this.ClearBtn);
             this.Controls.Add(this.ResetBtn);
             this.Controls.Add(this.BfsBtn);
             this.Controls.Add(this.DfsBtn);
@@ -127,6 +139,7 @@ namespace WindowsFormsApp8
         private System.Windows.Forms.Button DfsBtn;
         private System.Windows.Forms.Button BfsBtn;
         private System.Windows.Forms.Button ResetBtn;
+        private System.Windows.Forms.Button ClearBtn;
     }
 }
 

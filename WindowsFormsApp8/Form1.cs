@@ -341,11 +341,6 @@ namespace WindowsFormsApp8
                 ++free_id;
                 DrawEdges();
             }
-            else
-            {
-                ToDeafult();
-                ResetClicked();
-            }
         }
 
         private void Vertex_MouseClick(object sender, EventArgs e)
@@ -483,6 +478,19 @@ namespace WindowsFormsApp8
 
         private void ResetBtn_Click(object sender, EventArgs e)
         {
+            ToDeafult();
+            ResetClicked();
+        }
+
+        private void ClearBtn_Click(object sender, EventArgs e)
+        {
+            Edges.Clear();
+            for (int i = 0; i < Vertexes.Count; ++i)
+            {
+                this.Controls.Remove(Vertexes[i]);
+            }
+            Vertexes.Clear();
+            free_id = 1;
             ToDeafult();
             ResetClicked();
         }
