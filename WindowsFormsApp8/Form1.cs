@@ -1,14 +1,18 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace WindowsFormsApp8
 {
@@ -64,10 +68,39 @@ namespace WindowsFormsApp8
         bool clicked = false;
         Point iClick = new Point();
         private Graphics graphics;
+        private OpenFileDialog openFileDialog;
+        private SaveFileDialog saveFileDialog;
 
         public Form1()
         {
             InitializeComponent();
+            openFileDialog = new OpenFileDialog();
+            saveFileDialog = new SaveFileDialog();
+            // Настроим фильтры файлов
+            openFileDialog.Filter = "JSON files (*.json)|*.json";
+            saveFileDialog.Filter = "JSON files (*.json)|*.json";
+        }
+        public struct VertexCoordinates
+        {
+            public int X { get; set; }
+            public int Y { get; set; }
+        }
+        public class GraphData
+        {
+            public List<VertexData> Vertexes { get; set; }
+            public List<EdgeData> Edges { get; set; }
+        }
+
+        public class VertexData
+        {
+            public int Id { get; set; }
+            public VertexCoordinates Coordinates { get; set; }
+        }
+
+        public class EdgeData
+        {
+            public int From { get; set; }
+            public int To { get; set; }
         }
 
         // Вспомогательные функции
@@ -375,8 +408,15 @@ namespace WindowsFormsApp8
             }
         }
 
-        private void Vertex_MouseClick(object sender, EventArgs e)
+        private void Vertex_MouseClick(object sender, MouseEventArgs e)
         {
+            if (e.Button == MouseButtons.Right) // Сменить на правую
+            {
+                bFSToolStripMenuItem.Tag = sender;
+                dFSToolStripMenuItem.Tag = sender;
+                removeVertexToolStripMenuItem.Tag = sender;
+                contextMenuStrip1.Show(this, MousePosition);
+            }
             if (is_bfs)
             {
                 StartBfs(sender, e);
@@ -426,19 +466,16 @@ namespace WindowsFormsApp8
                 Point p = new Point();
                 p.X = e.X + Vertexes[clicked_id].Left;
                 p.Y = e.Y + Vertexes[clicked_id].Top;
-                /*if (p.X <= this.Width && p.Y <= this.Height)
-                {
-                    Vertexes[clicked_id].Left = p.X - iClick.X;
-                    Vertexes[clicked_id].Top = p.Y - iClick.Y;
-                    graphics.Clear(Color.White);
-                    DrawEdges();
-                }*/
+
+                // Проверка границ формы
+                p.X = Math.Max(25, Math.Min(p.X, this.ClientSize.Width - Vertexes[clicked_id].Width + 27));
+                p.Y = Math.Max(25, Math.Min(p.Y, this.ClientSize.Height - Vertexes[clicked_id].Height + 27));
+
                 Vertexes[clicked_id].Left = p.X - iClick.X;
                 Vertexes[clicked_id].Top = p.Y - iClick.Y;
                 graphics.Clear(Color.White);
                 DrawEdges();
             }
-
         }
 
         private void Vertex_MouseUp(object sender, MouseEventArgs e)
@@ -510,6 +547,127 @@ namespace WindowsFormsApp8
             ToDeafult();
             ResetClicked();
         }
+        private void ExportToJson()
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = saveFileDialog.FileName;
+                var graphData = new
+                {
+                    Vertexes = Vertexes.Select(v => new { Id = v.Text, Coordinates = new VertexCoordinates { X = v.Left, Y = v.Top } }).ToList(),
+                    Edges = Edges.Select(e => new { From = e.GetFrom(), To = e.GetTo() }).ToList()
+                };
+
+                string json = JsonConvert.SerializeObject(graphData, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(filename, json);
+            }
+        }
+        private void ImportFromJson()
+        {
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = openFileDialog.FileName;
+                string json = File.ReadAllText(filename);
+
+                try
+                {
+                    var graphData = JsonConvert.DeserializeObject<GraphData>(json);
+
+                    ClearBtn_Click(null, null); // Очищаем текущий граф
+
+                    foreach (var vertex in graphData.Vertexes)
+                    {
+                        RoundButton tmp = new RoundButton();
+                        tmp.Text = vertex.Id.ToString();
+                        tmp.Width = 50;
+                        tmp.Height = 50;
+                        tmp.BackColor = Color.DarkBlue;
+                        tmp.ForeColor = Color.White;
+                        tmp.MouseDown += Vertex_MouseDown;
+                        tmp.MouseUp += Vertex_MouseUp;
+                        tmp.MouseMove += Vertex_MouseMove;
+                        tmp.MouseClick += Vertex_MouseClick;
+                        tmp.Location = new Point(vertex.Coordinates.X, vertex.Coordinates.Y);
+                        this.Controls.Add(tmp);
+                        Vertexes.Add(tmp);
+                        free_id = Math.Max(free_id, vertex.Id + 1);
+                    }
+
+                    foreach (var edge in graphData.Edges)
+                    {
+                        Edges.Add(new Edge(edge.From, edge.To));
+                    }
+
+                    DrawEdges();
+                    ToDeafult();
+                }
+                catch (JsonException ex)
+                {
+                    MessageBox.Show("Ошибка при импорте файла: " + ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+        private void SaveGraphImage(string filename)
+        {
+            // Создаем Bitmap с размером, равным размеру формы
+            Bitmap bmp = new Bitmap(ClientSize.Width, ClientSize.Height);
+            // Создаем Graphics из Bitmap
+            Graphics g = Graphics.FromImage(bmp);
+            // Отрисовываем форму на Graphics
+            this.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
+            // Сохраняем Bitmap в файл
+            bmp.Save(filename, ImageFormat.Png);
+        }
+
+        private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ExportToJson();
+        }
+
+        private void ImportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImportFromJson();
+        }
+
+        private void dFSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RoundButton clickedVertex = (RoundButton)((ToolStripMenuItem)sender).Tag;
+            int vertexNum = int.Parse(clickedVertex.Text);
+            int vertexId = GetIdByNum(vertexNum);
+            StartDfs(Vertexes[vertexId], null);
+        }
+
+        private void bFSToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RoundButton clickedVertex = (RoundButton)((ToolStripMenuItem)sender).Tag;
+            int vertexNum = int.Parse(clickedVertex.Text);
+            int vertexId = GetIdByNum(vertexNum);
+            StartBfs(Vertexes[vertexId], null);
+        }
+
+        private void removeVertexToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Получаем вершину, на которой кликнули правой кнопкой мыши
+            RoundButton clickedVertex = (RoundButton)((ToolStripMenuItem)sender).Tag;
+            int vertexId = Vertexes.IndexOf(clickedVertex);
+
+            // Удаляем вершину и связанные с ней ребра
+            if (vertexId >= 0 && vertexId < Vertexes.Count)
+            {
+                RemoveVertex(clickedVertex, null);
+            }
+        }
+
+        /*
+        private void SaveToPNGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = saveFileDialog.FileName;
+                SaveGraphImage(filename);
+            }
+        }
+        */
     }
 
     public class RoundButton : Button
