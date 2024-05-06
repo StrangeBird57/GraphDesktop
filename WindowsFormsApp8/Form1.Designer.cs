@@ -34,18 +34,26 @@ namespace WindowsFormsApp8
             this.AddVertexBtn = new System.Windows.Forms.Button();
             this.RemoveVertexBtn = new System.Windows.Forms.Button();
             this.AddEdgeBtn = new System.Windows.Forms.Button();
-            this.DfsBtn = new System.Windows.Forms.Button();
-            this.BfsBtn = new System.Windows.Forms.Button();
             this.ResetBtn = new System.Windows.Forms.Button();
-            this.ClearBtn = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.новыйФалйToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.алгоритмыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dFSToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.bFSToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.dFSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bFSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeVertexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.графToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.txtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.матрицаСмеожностиtxtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.цветВершинToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.цветВершинПриВыделенииToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.размерВершинToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -84,28 +92,6 @@ namespace WindowsFormsApp8
             this.AddEdgeBtn.UseVisualStyleBackColor = true;
             this.AddEdgeBtn.Click += new System.EventHandler(this.AddEdgeBtn_Click);
             // 
-            // DfsBtn
-            // 
-            this.DfsBtn.Location = new System.Drawing.Point(357, 26);
-            this.DfsBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.DfsBtn.Name = "DfsBtn";
-            this.DfsBtn.Size = new System.Drawing.Size(112, 32);
-            this.DfsBtn.TabIndex = 4;
-            this.DfsBtn.Text = "DFS";
-            this.DfsBtn.UseVisualStyleBackColor = true;
-            this.DfsBtn.Click += new System.EventHandler(this.DfsBtn_Click);
-            // 
-            // BfsBtn
-            // 
-            this.BfsBtn.Location = new System.Drawing.Point(473, 26);
-            this.BfsBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.BfsBtn.Name = "BfsBtn";
-            this.BfsBtn.Size = new System.Drawing.Size(112, 32);
-            this.BfsBtn.TabIndex = 5;
-            this.BfsBtn.Text = "BFS";
-            this.BfsBtn.UseVisualStyleBackColor = true;
-            this.BfsBtn.Click += new System.EventHandler(this.BfsBtn_Click);
-            // 
             // ResetBtn
             // 
             this.ResetBtn.Location = new System.Drawing.Point(9, 334);
@@ -117,21 +103,12 @@ namespace WindowsFormsApp8
             this.ResetBtn.UseVisualStyleBackColor = true;
             this.ResetBtn.Click += new System.EventHandler(this.ResetBtn_Click);
             // 
-            // ClearBtn
-            // 
-            this.ClearBtn.Location = new System.Drawing.Point(540, 334);
-            this.ClearBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.ClearBtn.Name = "ClearBtn";
-            this.ClearBtn.Size = new System.Drawing.Size(75, 24);
-            this.ClearBtn.TabIndex = 7;
-            this.ClearBtn.Text = "Очистить";
-            this.ClearBtn.UseVisualStyleBackColor = true;
-            this.ClearBtn.Click += new System.EventHandler(this.ClearBtn_Click);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.файлToolStripMenuItem});
+            this.файлToolStripMenuItem,
+            this.видToolStripMenuItem,
+            this.алгоритмыToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(624, 24);
@@ -141,25 +118,59 @@ namespace WindowsFormsApp8
             // файлToolStripMenuItem
             // 
             this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ExportToolStripMenuItem,
-            this.ImportToolStripMenuItem});
+            this.новыйФалйToolStripMenuItem,
+            this.ImportToolStripMenuItem,
+            this.ExportToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.файлToolStripMenuItem.Text = "Файл";
             // 
-            // ExportToolStripMenuItem
+            // новыйФалйToolStripMenuItem
             // 
-            this.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem";
-            this.ExportToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.ExportToolStripMenuItem.Text = "Экспорт";
-            this.ExportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
+            this.новыйФалйToolStripMenuItem.Name = "новыйФалйToolStripMenuItem";
+            this.новыйФалйToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.новыйФалйToolStripMenuItem.Text = "Новый файл";
+            this.новыйФалйToolStripMenuItem.Click += new System.EventHandler(this.новыйФалйToolStripMenuItem_Click);
             // 
             // ImportToolStripMenuItem
             // 
             this.ImportToolStripMenuItem.Name = "ImportToolStripMenuItem";
-            this.ImportToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
-            this.ImportToolStripMenuItem.Text = "Импорт";
+            this.ImportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ImportToolStripMenuItem.Text = "Открыть";
             this.ImportToolStripMenuItem.Click += new System.EventHandler(this.ImportToolStripMenuItem_Click);
+            // 
+            // ExportToolStripMenuItem
+            // 
+            this.ExportToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.графToolStripMenuItem,
+            this.txtToolStripMenuItem,
+            this.матрицаСмеожностиtxtToolStripMenuItem});
+            this.ExportToolStripMenuItem.Name = "ExportToolStripMenuItem";
+            this.ExportToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.ExportToolStripMenuItem.Text = "Сохранить как...";
+            // 
+            // алгоритмыToolStripMenuItem
+            // 
+            this.алгоритмыToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.dFSToolStripMenuItem1,
+            this.bFSToolStripMenuItem1});
+            this.алгоритмыToolStripMenuItem.Name = "алгоритмыToolStripMenuItem";
+            this.алгоритмыToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
+            this.алгоритмыToolStripMenuItem.Text = "Алгоритмы";
+            // 
+            // dFSToolStripMenuItem1
+            // 
+            this.dFSToolStripMenuItem1.Name = "dFSToolStripMenuItem1";
+            this.dFSToolStripMenuItem1.Size = new System.Drawing.Size(94, 22);
+            this.dFSToolStripMenuItem1.Text = "DFS";
+            this.dFSToolStripMenuItem1.Click += new System.EventHandler(this.dFSToolStripMenuItem1_Click);
+            // 
+            // bFSToolStripMenuItem1
+            // 
+            this.bFSToolStripMenuItem1.Name = "bFSToolStripMenuItem1";
+            this.bFSToolStripMenuItem1.Size = new System.Drawing.Size(94, 22);
+            this.bFSToolStripMenuItem1.Text = "BFS";
+            this.bFSToolStripMenuItem1.Click += new System.EventHandler(this.bFSToolStripMenuItem1_Click);
             // 
             // contextMenuStrip1
             // 
@@ -191,16 +202,65 @@ namespace WindowsFormsApp8
             this.removeVertexToolStripMenuItem.Text = "Удалить вершину";
             this.removeVertexToolStripMenuItem.Click += new System.EventHandler(this.removeVertexToolStripMenuItem_Click);
             // 
+            // графToolStripMenuItem
+            // 
+            this.графToolStripMenuItem.Name = "графToolStripMenuItem";
+            this.графToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.графToolStripMenuItem.Text = "Граф (.json)";
+            this.графToolStripMenuItem.Click += new System.EventHandler(this.графToolStripMenuItem_Click);
+            // 
+            // txtToolStripMenuItem
+            // 
+            this.txtToolStripMenuItem.Name = "txtToolStripMenuItem";
+            this.txtToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.txtToolStripMenuItem.Text = "Список рёбер (.txt)";
+            this.txtToolStripMenuItem.Click += new System.EventHandler(this.txtToolStripMenuItem_Click);
+            // 
+            // матрицаСмеожностиtxtToolStripMenuItem
+            // 
+            this.матрицаСмеожностиtxtToolStripMenuItem.Name = "матрицаСмеожностиtxtToolStripMenuItem";
+            this.матрицаСмеожностиtxtToolStripMenuItem.Size = new System.Drawing.Size(216, 22);
+            this.матрицаСмеожностиtxtToolStripMenuItem.Text = "Матрица смежности (.txt)";
+            this.матрицаСмеожностиtxtToolStripMenuItem.Click += new System.EventHandler(this.матрицаСмеожностиtxtToolStripMenuItem_Click);
+            // 
+            // видToolStripMenuItem
+            // 
+            this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.цветВершинToolStripMenuItem,
+            this.цветВершинПриВыделенииToolStripMenuItem,
+            this.размерВершинToolStripMenuItem});
+            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
+            this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.видToolStripMenuItem.Text = "Вид";
+            // 
+            // цветВершинToolStripMenuItem
+            // 
+            this.цветВершинToolStripMenuItem.Name = "цветВершинToolStripMenuItem";
+            this.цветВершинToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.цветВершинToolStripMenuItem.Text = "Цвет вершин по умолчанию";
+            this.цветВершинToolStripMenuItem.Click += new System.EventHandler(this.defaultVertexColorMenuItem_Click);
+            // 
+            // цветВершинПриВыделенииToolStripMenuItem
+            // 
+            this.цветВершинПриВыделенииToolStripMenuItem.Name = "цветВершинПриВыделенииToolStripMenuItem";
+            this.цветВершинПриВыделенииToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.цветВершинПриВыделенииToolStripMenuItem.Text = "Цвет вершин при выделении";
+            this.цветВершинПриВыделенииToolStripMenuItem.Click += new System.EventHandler(this.selectedVertexColorMenuItem_Click);
+            // 
+            // размерВершинToolStripMenuItem
+            // 
+            this.размерВершинToolStripMenuItem.Name = "размерВершинToolStripMenuItem";
+            this.размерВершинToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.размерВершинToolStripMenuItem.Text = "Размер вершин";
+            this.размерВершинToolStripMenuItem.Click += new System.EventHandler(this.vertexSizeMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(624, 368);
-            this.Controls.Add(this.ClearBtn);
             this.Controls.Add(this.ResetBtn);
-            this.Controls.Add(this.BfsBtn);
-            this.Controls.Add(this.DfsBtn);
             this.Controls.Add(this.AddEdgeBtn);
             this.Controls.Add(this.RemoveVertexBtn);
             this.Controls.Add(this.AddVertexBtn);
@@ -209,7 +269,7 @@ namespace WindowsFormsApp8
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Визуализатор графов";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.Form_MouseClick);
             this.menuStrip1.ResumeLayout(false);
@@ -224,10 +284,7 @@ namespace WindowsFormsApp8
         private System.Windows.Forms.Button AddVertexBtn;
         private System.Windows.Forms.Button RemoveVertexBtn;
         private System.Windows.Forms.Button AddEdgeBtn;
-        private System.Windows.Forms.Button DfsBtn;
-        private System.Windows.Forms.Button BfsBtn;
         private System.Windows.Forms.Button ResetBtn;
-        private System.Windows.Forms.Button ClearBtn;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExportToolStripMenuItem;
@@ -236,6 +293,17 @@ namespace WindowsFormsApp8
         private System.Windows.Forms.ToolStripMenuItem dFSToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem bFSToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeVertexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem алгоритмыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dFSToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem bFSToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem новыйФалйToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem графToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem txtToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem матрицаСмеожностиtxtToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem цветВершинToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem цветВершинПриВыделенииToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem размерВершинToolStripMenuItem;
     }
 }
 
