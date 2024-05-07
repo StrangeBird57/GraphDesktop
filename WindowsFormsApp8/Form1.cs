@@ -70,10 +70,30 @@ namespace WindowsFormsApp8
         private Graphics graphics;
         private OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
+        private ColorDialog defaultVertexColorDialog = new ColorDialog();
+        private ColorDialog selectedVertexColorDialog = new ColorDialog();
+        Color defaultVertexColor = Color.DarkBlue;
+        Color selectedVertexColor = Color.HotPink;
 
+        private void UpdateVertexColors()
+        {
+            foreach (RoundButton vertex in Vertexes)
+            {
+                if (vertex.BackColor == Color.HotPink) // Проверка на выделение
+                {
+                    vertex.BackColor = selectedVertexColor;
+                }
+                else
+                {
+                    vertex.BackColor = defaultVertexColor;
+                }
+            }
+            this.Refresh(); // Перерисовать форму
+        }
         public Form1()
         {
             InitializeComponent();
+            UpdateVertexColors();
             openFileDialog = new OpenFileDialog();
             saveFileDialog = new SaveFileDialog();
             // Настроим фильтры файлов
@@ -156,7 +176,7 @@ namespace WindowsFormsApp8
         {
             for (int i = 0; i < nums_pos.Count; ++i)
             {
-                graphics.DrawString((i + 1).ToString(), new Font("Arial", 12), new SolidBrush(Color.DarkBlue), nums_pos[i]);
+                graphics.DrawString((i + 1).ToString(), new Font("Arial", 12), new SolidBrush(defaultVertexColor), nums_pos[i]);
             }
         }
 
@@ -180,11 +200,11 @@ namespace WindowsFormsApp8
         {
             for (int i = 0; i < Vertexes.Count; ++i)
             {
-                Vertexes[i].BackColor = Color.DarkBlue;
+                Vertexes[i].BackColor = defaultVertexColor;
             }
             for (int i = 0; i < Edges.Count; ++i)
             {
-                Edges[i].SetColor(Color.DarkBlue);
+                Edges[i].SetColor(defaultVertexColor);
             }
             this.Refresh();
             DrawEdges();
@@ -228,7 +248,7 @@ namespace WindowsFormsApp8
                     if (sender.Equals(Vertexes[i]))
                     {
                         first_id = Convert.ToInt32(Vertexes[i].Text);
-                        Vertexes[i].BackColor = Color.HotPink;
+                        Vertexes[i].BackColor = selectedVertexColor;
                     }
                 }
             }
@@ -239,7 +259,7 @@ namespace WindowsFormsApp8
                     if (sender.Equals(Vertexes[i]))
                     {
                         second_id = Convert.ToInt32(Vertexes[i].Text);
-                        Vertexes[i].BackColor = Color.HotPink;
+                        Vertexes[i].BackColor = selectedVertexColor;
                     }
                 }
                 Edges.Add(new Edge(first_id, second_id));
@@ -260,7 +280,7 @@ namespace WindowsFormsApp8
                 if (sender.Equals(Vertexes[i]))
                 {
                     dfs_id = Convert.ToInt32(Vertexes[i].Text);
-                    Vertexes[i].BackColor = Color.HotPink;
+                    Vertexes[i].BackColor = selectedVertexColor;
                 }
             }
             this.Refresh();
@@ -286,7 +306,7 @@ namespace WindowsFormsApp8
                 if (sender.Equals(Vertexes[i]))
                 {
                     bfs_id = Convert.ToInt32(Vertexes[i].Text);
-                    Vertexes[i].BackColor = Color.HotPink;
+                    Vertexes[i].BackColor = selectedVertexColor;
                 }
             }
             this.Refresh();
@@ -336,7 +356,7 @@ namespace WindowsFormsApp8
                     Edges[GetEdgeId(v, u)].SetColor(Color.HotPink);
                     DrawEdges();
                     Thread.Sleep(500);
-                    Vertexes[u].BackColor = Color.HotPink;
+                    Vertexes[u].BackColor = selectedVertexColor;
                     this.Refresh();
                     int x = Vertexes[u].Left + 18;
                     int y = Vertexes[u].Top - 15;
@@ -370,7 +390,7 @@ namespace WindowsFormsApp8
                             Edges[GetEdgeId(v, to)].SetColor(Color.HotPink);
                             DrawEdges();
                             Thread.Sleep(500);
-                            Vertexes[to].BackColor = Color.HotPink;
+                            Vertexes[to].BackColor = selectedVertexColor;
                             this.Refresh();
                             int x = Vertexes[to].Left + 18;
                             int y = Vertexes[to].Top - 15;
@@ -394,7 +414,7 @@ namespace WindowsFormsApp8
                 tmp.Text = free_id.ToString();
                 tmp.Width = 50;
                 tmp.Height = 50;
-                tmp.BackColor = Color.DarkBlue;
+                tmp.BackColor = defaultVertexColor;
                 tmp.ForeColor = Color.White;
                 tmp.MouseDown += Vertex_MouseDown;
                 tmp.MouseUp += Vertex_MouseUp;
@@ -448,7 +468,7 @@ namespace WindowsFormsApp8
                         if (sender.Equals(Vertexes[i]))
                         {
                             clicked_id = i;
-                            Vertexes[clicked_id].BackColor = Color.HotPink;
+                            Vertexes[clicked_id].BackColor = selectedVertexColor;
                         }
                     }
                     Point p = ConvertFromChildToForm(e.X, e.Y, Vertexes[clicked_id]);
@@ -507,26 +527,11 @@ namespace WindowsFormsApp8
             is_add_edge = true;
         }
 
-        private void DfsBtn_Click(object sender, EventArgs e)
-        {
-            ToDeafult();
-            ResetClicked();
-            is_dfs = true;
-        }
-
-        private void BfsBtn_Click(object sender, EventArgs e)
-        {
-            ToDeafult();
-            ResetClicked();
-            is_bfs = true;
-        }
-
         private void Form1_Load(object sender, EventArgs e)
         {
             AddVertexBtn.BackColor = Color.Gainsboro;
             RemoveVertexBtn.BackColor = Color.Gainsboro;
             AddEdgeBtn.BackColor = Color.Gainsboro;
-            DfsBtn.BackColor = Color.Gainsboro;
         }
 
         private void ResetBtn_Click(object sender, EventArgs e)
@@ -535,18 +540,6 @@ namespace WindowsFormsApp8
             ResetClicked();
         }
 
-        private void ClearBtn_Click(object sender, EventArgs e)
-        {
-            Edges.Clear();
-            for (int i = 0; i < Vertexes.Count; ++i)
-            {
-                this.Controls.Remove(Vertexes[i]);
-            }
-            Vertexes.Clear();
-            free_id = 1;
-            ToDeafult();
-            ResetClicked();
-        }
         private void ExportToJson()
         {
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -573,7 +566,7 @@ namespace WindowsFormsApp8
                 {
                     var graphData = JsonConvert.DeserializeObject<GraphData>(json);
 
-                    ClearBtn_Click(null, null); // Очищаем текущий граф
+                    новыйФалйToolStripMenuItem_Click(null, null); // Очищаем текущий граф
 
                     foreach (var vertex in graphData.Vertexes)
                     {
@@ -581,7 +574,7 @@ namespace WindowsFormsApp8
                         tmp.Text = vertex.Id.ToString();
                         tmp.Width = 50;
                         tmp.Height = 50;
-                        tmp.BackColor = Color.DarkBlue;
+                        tmp.BackColor = defaultVertexColor;
                         tmp.ForeColor = Color.White;
                         tmp.MouseDown += Vertex_MouseDown;
                         tmp.MouseUp += Vertex_MouseUp;
@@ -619,11 +612,6 @@ namespace WindowsFormsApp8
             bmp.Save(filename, ImageFormat.Png);
         }
 
-        private void ExportToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ExportToJson();
-        }
-
         private void ImportToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ImportFromJson();
@@ -657,6 +645,117 @@ namespace WindowsFormsApp8
                 RemoveVertex(clickedVertex, null);
             }
         }
+
+        private void dFSToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ToDeafult();
+            ResetClicked();
+            is_dfs = true;
+        }
+
+        private void bFSToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            ToDeafult();
+            ResetClicked();
+            is_bfs = true;
+        }
+
+        private void новыйФалйToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Edges.Clear();
+            for (int i = 0; i < Vertexes.Count; ++i)
+            {
+                this.Controls.Remove(Vertexes[i]);
+            }
+            Vertexes.Clear();
+            free_id = 1;
+            ToDeafult();
+            ResetClicked();
+        }
+
+        private void SaveAdjacencyMatrix(string filename)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Матрица смежности:");
+            for (int i = 0; i < Graph.Count; i++)
+            {
+                for (int j = 0; j < Graph[i].Count; j++)
+                {
+                    sb.Append(Graph[i][j]).Append(" ");
+                }
+                sb.AppendLine();
+            }
+            File.WriteAllText(filename, sb.ToString());
+        }
+
+        private void SaveEdgeList(string filename)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("Список рёбер:");
+            for (int i = 0; i < Edges.Count; i++)
+            {
+                int from = Edges[i].GetFrom();
+                int to = Edges[i].GetTo();
+                sb.AppendLine($"{from} {to}");
+            }
+            File.WriteAllText(filename, sb.ToString());
+        }
+
+        // Добавить пункты меню для сохранения матрицы и списка
+        private void матрицаСмеожностиtxtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Установить фильтр для TXT
+            saveFileDialog.Filter = "Text files (*.txt)|*.txt";
+
+            // Обновить матрицу смежности перед сохранением
+            UpdateGraph();
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = saveFileDialog.FileName;
+                SaveAdjacencyMatrix(filename);
+            }
+        }
+
+        private void txtToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog.Filter = "Text files (*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string filename = saveFileDialog.FileName;
+                SaveEdgeList(filename);
+            }
+        }
+
+        private void графToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog.Filter = "JSON files (*.json)|*.json";
+            ExportToJson();
+        }
+
+        private void defaultVertexColorMenuItem_Click(object sender, EventArgs e)
+        {
+            if (defaultVertexColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                defaultVertexColor = defaultVertexColorDialog.Color;
+                UpdateVertexColors();
+            }
+        }
+
+        private void selectedVertexColorMenuItem_Click(object sender, EventArgs e)
+        {
+            if (selectedVertexColorDialog.ShowDialog() == DialogResult.OK)
+            {
+                selectedVertexColor = selectedVertexColorDialog.Color;
+                UpdateVertexColors();
+            }
+        }
+
+        private void vertexSizeMenuItem_Click(object sender, EventArgs e)
+        {
+            // WIP
+        }
+
 
         /*
         private void SaveToPNGToolStripMenuItem_Click(object sender, EventArgs e)
