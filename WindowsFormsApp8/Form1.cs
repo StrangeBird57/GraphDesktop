@@ -237,6 +237,7 @@ namespace WindowsFormsApp8
 
             this.Controls.Remove(Vertexes[id]);
             Vertexes.Remove(Vertexes[id]);
+            ToDeafult();
         }
 
         private void AddEdge(object sender, EventArgs e)
@@ -740,6 +741,7 @@ namespace WindowsFormsApp8
                 defaultVertexColor = defaultVertexColorDialog.Color;
                 UpdateVertexColors();
             }
+            ToDeafult();
         }
 
         private void selectedVertexColorMenuItem_Click(object sender, EventArgs e)
@@ -749,6 +751,7 @@ namespace WindowsFormsApp8
                 selectedVertexColor = selectedVertexColorDialog.Color;
                 UpdateVertexColors();
             }
+            ToDeafult();
         }
 
         private void vertexSizeMenuItem_Click(object sender, EventArgs e)
