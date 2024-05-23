@@ -22,11 +22,13 @@ namespace WindowsFormsApp8
         {
             private int from, to;
             private Pen color;
+            private bool is_oriented;
 
-            public Edge(int from, int to)
+            public Edge(int from, int to, bool is_oriented)
             {
                 this.from = from;
                 this.to = to;
+                this.is_oriented = is_oriented;
                 this.color = new Pen(Color.DarkBlue);
             }
 
@@ -49,6 +51,11 @@ namespace WindowsFormsApp8
             {
                 return to;
             }
+
+            public bool GetIsOriented()
+            {
+                return is_oriented;
+            }
         }
 
         List<Edge> Edges = new List<Edge>();
@@ -60,6 +67,7 @@ namespace WindowsFormsApp8
         int clicked_id = -1;
         int first_id = -1;
         int second_id = -1;
+        bool is_oriented = false;
         bool is_add_vertex = false;
         bool is_remove_vertex = false;
         bool is_add_edge = false;
@@ -125,6 +133,11 @@ namespace WindowsFormsApp8
 
         // Вспомогательные функции
 
+        double Dist(Point first, Point second)
+        {
+            return Math.Sqrt(Math.Pow((second.X - first.X), 2) + Math.Pow((second.Y - first.Y), 2));
+        }
+
         private Point ConvertFromChildToForm(int x, int y, Control control)
         {
             Point p = new Point(x, y);
@@ -168,6 +181,16 @@ namespace WindowsFormsApp8
                 int second_vertex_id = GetIdByNum(Edges[i].GetTo());
                 Point first = new Point(Vertexes[first_vertex_id].Left + 25, Vertexes[first_vertex_id].Top + 25);
                 Point second = new Point(Vertexes[second_vertex_id].Left + 25, Vertexes[second_vertex_id].Top + 25);
+                Pen pen = Edges[i].GetColor();
+                if (Edges[i].GetIsOriented() == true)
+                {
+                    double len = Dist(first, second);
+                    double d = len - 20;
+                    double l = d / (len - d);
+                    second.X = Convert.ToInt32((first.X + l * second.X) / (1 + l));
+                    second.Y = Convert.ToInt32((first.Y + l * second.Y) / (1 + l));
+                    pen.CustomEndCap = new AdjustableArrowCap(4, 6);
+                }
                 graphics.DrawLine(Edges[i].GetColor(), first, second);
             }
         }
@@ -263,7 +286,7 @@ namespace WindowsFormsApp8
                         Vertexes[i].BackColor = selectedVertexColor;
                     }
                 }
-                Edges.Add(new Edge(first_id, second_id));
+                Edges.Add(new Edge(first_id, second_id, is_oriented));
                 first_id = -1;
                 second_id = -1;
                 ToDeafult();
@@ -341,8 +364,15 @@ namespace WindowsFormsApp8
             {
                 int first_vertex_id = GetIdByNum(Edges[i].GetFrom());
                 int second_vertex_id = GetIdByNum(Edges[i].GetTo());
-                Graph[first_vertex_id][second_vertex_id] = 1;
-                Graph[second_vertex_id][first_vertex_id] = 1;
+                if (Edges[i].GetIsOriented())
+                {
+                    Graph[first_vertex_id][second_vertex_id] = 1;
+                }
+                else
+                {
+                    Graph[first_vertex_id][second_vertex_id] = 1;
+                    Graph[second_vertex_id][first_vertex_id] = 1;
+                }
             }
         }
 
@@ -556,7 +586,7 @@ namespace WindowsFormsApp8
                 File.WriteAllText(filename, json);
             }
         }
-        private void ImportFromJson()
+        private void ImportFromJson()// Доработать для ор рёбер
         {
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -589,7 +619,7 @@ namespace WindowsFormsApp8
 
                     foreach (var edge in graphData.Edges)
                     {
-                        Edges.Add(new Edge(edge.From, edge.To));
+                        Edges.Add(new Edge(edge.From, edge.To, false)); // Доработать для ор рёбер
                     }
 
                     DrawEdges();
@@ -759,6 +789,10 @@ namespace WindowsFormsApp8
             // WIP
         }
 
+        private void IsOrientedSwitch_CheckedChanged(object sender, EventArgs e)
+        {
+            is_oriented = IsOrientedSwitch.Checked;
+        }
 
         /*
         private void SaveToPNGToolStripMenuItem_Click(object sender, EventArgs e)
@@ -780,6 +814,52 @@ namespace WindowsFormsApp8
             grPath.AddEllipse(2, 2, ClientSize.Width - 5, ClientSize.Height - 5);
             this.Region = new System.Drawing.Region(grPath);
             base.OnPaint(e);
+        }
+    }
+
+    public class ToggleSwitch : CheckBox
+    {
+        private Color _onColor = Color.Green;
+        private Color _offColor = Color.Gray;
+
+        public Color OnColor
+        {
+            get { return _onColor; }
+            set { _onColor = value; }
+        }
+
+        public Color OffColor
+        {
+            get { return _offColor; }
+            set { _offColor = value; }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            var g = e.Graphics;
+            var switchRectangle = new Rectangle(0, 0, Height * 2, Height);
+            var switchBorderPen = new Pen(Color.Black, 2);
+            var switchFillBrush = new SolidBrush(Checked ? OnColor : OffColor);
+            var thumbRectangle = new Rectangle(0, 0, Height - 4, Height - 4);
+            var thumbBorderPen = new Pen(Color.Black, 1);
+            var thumbFillBrush = new SolidBrush(Color.White);
+
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            g.FillRectangle(switchFillBrush, switchRectangle);
+            g.DrawRectangle(switchBorderPen, switchRectangle);
+
+            if (Checked)
+            {
+                thumbRectangle.X = switchRectangle.Width - thumbRectangle.Width - 2;
+            }
+            else
+            {
+                thumbRectangle.X = 2;
+            }
+
+            g.FillEllipse(thumbFillBrush, thumbRectangle);
+            g.DrawEllipse(thumbBorderPen, thumbRectangle);
         }
     }
 }
