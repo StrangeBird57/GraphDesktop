@@ -263,8 +263,8 @@ namespace WindowsFormsApp8
             this.IsOrientedSwitch.AutoSize = true;
             this.IsOrientedSwitch.Location = new System.Drawing.Point(657, 42);
             this.IsOrientedSwitch.Name = "IsOrientedSwitch";
-            this.IsOrientedSwitch.OffColor = System.Drawing.Color.Gray;
-            this.IsOrientedSwitch.OnColor = System.Drawing.Color.Green;
+            this.IsOrientedSwitch.OffColor = System.Drawing.Color.Gainsboro;
+            this.IsOrientedSwitch.OnColor = System.Drawing.Color.CornflowerBlue;
             this.IsOrientedSwitch.Size = new System.Drawing.Size(42, 21);
             this.IsOrientedSwitch.TabIndex = 11;
             this.IsOrientedSwitch.Text = "   ";
