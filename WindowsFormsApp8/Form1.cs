@@ -23,12 +23,14 @@ namespace WindowsFormsApp8
             private int from, to;
             private Pen color;
             private bool is_oriented;
+            private bool is_weighted;
 
-            public Edge(int from, int to, bool is_oriented)
+            public Edge(int from, int to, bool is_oriented, bool is_weighted = false)
             {
                 this.from = from;
                 this.to = to;
                 this.is_oriented = is_oriented;
+                this.is_weighted = is_weighted;
                 this.color = new Pen(Color.DarkBlue);
             }
 
@@ -55,6 +57,11 @@ namespace WindowsFormsApp8
             public bool GetIsOriented()
             {
                 return is_oriented;
+            }
+
+            public bool GetIsWeighted()
+            {
+                return is_weighted;
             }
         }
 
@@ -133,6 +140,18 @@ namespace WindowsFormsApp8
 
         // Вспомогательные функции
 
+        Point CalcWeigthPos(Point first, Point second)
+        {
+            first.X = (first.X + second.X) / 2;
+            first.Y = (first.Y + second.Y) / 2;
+            Point vector = new Point(first.Y - second.Y, second.X - first.X);
+            double len = Dist(first, second);
+            double kef = 10 / len;
+            Point normal_vector = new Point(Convert.ToInt32(vector.X * kef), Convert.ToInt32(vector.Y * kef));
+            Point result = new Point(first.X + normal_vector.X, first.Y + normal_vector.Y);
+            return result;
+        }
+        
         double Dist(Point first, Point second)
         {
             return Math.Sqrt(Math.Pow((second.X - first.X), 2) + Math.Pow((second.Y - first.Y), 2));
@@ -182,6 +201,7 @@ namespace WindowsFormsApp8
                 Point first = new Point(Vertexes[first_vertex_id].Left + 25, Vertexes[first_vertex_id].Top + 25);
                 Point second = new Point(Vertexes[second_vertex_id].Left + 25, Vertexes[second_vertex_id].Top + 25);
                 Pen pen = Edges[i].GetColor();
+                Point p = CalcWeigthPos(first, second);
                 if (Edges[i].GetIsOriented() == true)
                 {
                     double len = Dist(first, second);
@@ -191,6 +211,9 @@ namespace WindowsFormsApp8
                     second.Y = Convert.ToInt32((first.Y + l * second.Y) / (1 + l));
                     pen.CustomEndCap = new AdjustableArrowCap(4, 6);
                 }
+                Font drawFont = new Font("Arial", 16);
+                SolidBrush drawBrush = new SolidBrush(Color.Black);
+                graphics.DrawString("42", drawFont, drawBrush, p);
                 graphics.DrawLine(Edges[i].GetColor(), first, second);
             }
         }
